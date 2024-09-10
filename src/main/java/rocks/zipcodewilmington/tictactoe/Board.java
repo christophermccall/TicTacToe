@@ -6,7 +6,6 @@ package rocks.zipcodewilmington.tictactoe;
 public class Board {
     Character[][] matrix;
     String winner = "";
-    Board board;
     public Board(Character[][] matrix) {
         this.matrix = matrix;
     }
@@ -21,14 +20,27 @@ public class Board {
         for (int i = 0, j = matrix.length-1; i < matrix.length; i++, j--){
             if (matrix[j][i].toString().equals("X")){
                 diagLToR += 1;
-            }else if (matrix[i][i].toString().equals("X")){
+            } if (matrix[i][i].toString().equals("X")){
                 diagRToL += 1;
-            }else if (matrix[0][i].toString().equals("X")){
-                row += 1;
-            } else if (matrix[i][0].toString().equals("X")){
-                col += 1;
+
+            } for (int k = 0; k < matrix.length; k++) {
+                if (matrix[k][i].toString().equals("X")) {
+                    row += 1;
+                    if (row == 3){
+                        return true;
+                    }
+                }
+                if (matrix[i][k].toString().equals("X")) {
+                    col += 1;
+                    if (col == 3){
+                        return true;
+                    }
+                }
             }
-    }   if (diagLToR == 3|| diagRToL == 3 || col == 3 || row ==3){
+            row = 0;
+            col = 0;
+        } if (diagLToR == 3|| diagRToL == 3){
+                this.winner = "O";
                 inFavor = true;
             }
         return inFavor;
@@ -40,18 +52,33 @@ public class Board {
         int col = 0;
         int row = 0;
 
+
         boolean inFavor = false;
         for (int i = 0, j = matrix.length-1; i < matrix.length; i++, j--){
             if (matrix[j][i].toString().equals("O")){
                 diagLToR += 1;
-            }else if (matrix[i][i].toString().equals("O")){
-                diagRToL += 1;
-            }else if (matrix[0][i].toString().equals("O")){
-                row += 1;
-            } else if (matrix[i][0].toString().equals("O")){
-                col += 1;
             }
-    }   if (diagLToR == 3|| diagRToL == 3 || col == 3 || row ==3){
+            if (matrix[i][i].toString().equals("O")){
+                diagRToL += 1;
+            }
+            for (int k = 0; k < matrix.length; k++) {
+                if (matrix[k][i].toString().equals("O")) {
+                    row += 1;
+                    if (row == 3){
+                        return true;
+                    }
+                }
+                if (matrix[i][k].toString().equals("O")) {
+                    col += 1;
+                    if (col == 3){
+                        return true;
+                    }
+                }
+            }
+            row = 0;
+            col = 0;
+        } if (diagLToR == 3|| diagRToL == 3){
+                this.winner = "O";
                 inFavor = true;
             }
         return inFavor;
@@ -59,16 +86,17 @@ public class Board {
 
 
     public Boolean isTie() {
-        return null;
+        this.winner = "";
+        return !isInFavorOfO() && !isInFavorOfX();
     }
 
     public String getWinner() {
-        if(isInFavorOfX()) {
-            this.winner = "X";
-        } else if(isInFavorOfO()) {
+        if(isInFavorOfO()) {
             this.winner = "O";
+        } if(isInFavorOfX()) {
+            this.winner = "X";
         }
-        return this.winner;
+        return winner;
         }
     }
 
